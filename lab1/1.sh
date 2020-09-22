@@ -14,4 +14,4 @@ else
     b=$a
 fi
 
- echo $b
+echo $b
