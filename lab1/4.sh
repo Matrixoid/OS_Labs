@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[ "$PWD" == "/root" ]]
+if [[ "$PWD" == "$HOME" ]]
 then
 echo "Script was launched from the home directory"
 exit 0
