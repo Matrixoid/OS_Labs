@@ -1,28 +1,50 @@
 #!/bin/bash
 
 echo $$ > .pid
-x=1
 
-./6_gen.sh
+number=1
+MODE=""
 
-usr1() {
-	op="+"
+stop()
+{
+	MODE="stop"
 }
 
-usr2() {
-	op="*"
+trap 'stop' SIGTERM
+
+usr1()
+{
+	MODE="plus"
 }
 
 trap 'usr1' USR1
+
+usr2()
+{
+	MODE="multiply"
+}
+
 trap 'usr2' USR2
 
 while true
 do
-	case $op in
-	"+") let x=$x+2
-			echo $x ;;
-	"*") let x=$x*2
-			echo $x ;;
-	esac
-	sleep 1
+    case $MODE in
+        "plus")
+            let count=$count+2
+            echo $count
+            MODE=""
+            ;;
+	"multiply")
+            let count=$count*2
+            echo $count
+	    MODE=""
+            ;;
+        "stop")
+            echo "Stopped by SIGTERM"
+            rm .pid
+            exit 0
+            ;;
+    esac
+    sleep 1
 done
+

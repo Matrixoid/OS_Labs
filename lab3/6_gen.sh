@@ -1,22 +1,18 @@
 #!/bin/bash
 
 while true
-do
+do 
 	read LINE
-	if [[ "$LINE" == "TERM" ]]
-	then
-		kill -SIGTERM $(cat .pid)
-		exit
-	fi
-	if [[ "$LINE" == "+" ]]
-	then
-		kill -USR1 $(cat .pid)
-		continue
-	fi
-	if [[ "$LINE" == "*" ]]
-	then
-		kill -USR2 $(cat .pid)
-		continue
-	fi
-done < test
-
+	case $LINE in
+		"+")
+			kill -USR1 $(cat .pid)
+			;;
+		"*")
+			kill -USR2 $(cat .pid)
+			;;
+		TERM)
+			kill -SIGTERM $(cat .pid)
+			exit
+			;;
+	esac
+done

@@ -1,34 +1,37 @@
 #!/bin/bash
 
-op="+"
-res=1
+number="1"
+operand="+"
 
-(tail -f queue) |
+generatorPID=$(head -n 1 "dataTask5.txt")
+
+(tail -n 0 -f "dataTask5.txt") |
 while true
 do
-	read LINE
-	if [[ "$LINE" == "QUIT" ]]
-	then 
-		rm queue
-		echo "exit"
+	read tempString
+	if [[ $tempString == "QUIT" ]]; then
+		echo "Planned stop"
 		killall tail
+		kill $generatorPID
+		rm dataTask5.txt
 		exit 0
 	fi
-	if ! [[ $LINE =~ '^[0-9]+&' || $LINE == "+" || $LINE == "*" ]]
-	then
-		rm queue
-		echo "Error! NaN"
-		exit 1
+
+	if [[ $tempString == "+" || $tempString == "*" ]]; then
+		operand=$tempString
+		continue
 	fi
-	if [[ $LINE == "+" || $LINE == "*" ]]
-	then
-		op = "$LINE"
-	else if [[ $op == "+" ]]
-		res=$(echo $res $LINE | awk '{print $1 + $2}')
-		echo $res
-		else
-			res=$(echo $res $LINE | awk '{print $1 * &2}')
-			echo $res
-		fi
+
+	if [[ $tempString =~ ^-?[0-9]+$ ]]; then
+		number=$(echo "scale=10; ($number)$operand($tempString)" | bc)
+		echo $number
+		continue
+	else
+		echo "Unplanned stop"
+		killall tail
+		kill $generatorPID
+		rm dataTask5.txt
+		exit 0
 	fi
+	sleep 1
 done
