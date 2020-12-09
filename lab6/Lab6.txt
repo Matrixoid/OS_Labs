@@ -1,0 +1,54 @@
+===================================================
+1.1 :
+	cd C:\
+	md LAB6
+	cd LAB6
+	mem > mem.txt
+	ver > ver.txt
+1.2 :
+	md TEST
+	copy .\* .\TEST
+1.3 :
+	type .\* > type.txt
+1.4 :
+	del .\ver.txt .\mem.txt
+
+===================================================
+2.1 :
+	Панель управления -> Система и безопасность -> Система -> Имя Компьютера
+	//%computername%
+2.2 :
+	./copy.bat
+	copy.bat :
+		xcopy /Z C:\cd\copy_file.exe \\%computername%\temp\copy_file.exe
+2.3 :
+	schtasks /Create /SC MINUTE /TN copy /TR copy.bat
+2.4 :
+	schtasks /Query | find "copy"
+	schtasts /Delete copy
+2.5 :
+	fc C:\cd\copy_file.exe \\%computername%\temp\copy_file.exe
+2.6 :
+	./copy.bat
+
+===================================================
+3.1 :
+	net start > net.txt
+3.2 :
+	./task.bat
+	task3.bat :
+		net stop dnscache
+		timeout /T 5 /nobreak
+		net start > net_after.txt
+		./comparator.bat
+		comparator.bat :
+			fc net.txt net_after.txt > net_diff.txt
+		net start dnscache
+
+===================================================
+4.1 :
+	driverquery /NH /FO TABLE > DRIVERS.txt
+4.2 :
+	sort /R DRIVERS.txt
+
+===================================================
